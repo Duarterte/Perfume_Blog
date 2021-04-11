@@ -1,0 +1,30 @@
+<section style="text-align: center;">
+    {{#each data}}
+        <article style="border: 1px solid;">
+        {{#each this as | joda |}}
+            {{#with joda}}
+                <h3>{{perfTitle}}</h3>
+                <p>{{perfBody}}</p>
+                <p>{{calification}}</p>
+                {{#if perfTitle}}
+                    <div class="" style=" justify-content: center;">
+                    <form action="">
+                        <param name="" value="">
+                        <button type="submit">delete</button>
+                    </form>
+                    <form action="">
+                        <param name="" value="">
+                        <button type="submit">modifie</button>
+                    </form>
+                    <form action="">
+                        <param name="" value="">
+                        <button type="submit">save</button>
+                    </form>
+                </div>
+                {{/if}}
+            {{/with}}
+        {{/each}}
+        </article>
+        <br/>
+    {{/each}}
+</section>

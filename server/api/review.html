@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <form method="POST", action="/review">
+   <table>
+       <tbody>
+           <tr>
+               <td>Review title</td>
+               <td>
+                   <input type="text" name="perfTitle" id="">
+               </td>
+           </tr>
+           <tr>
+               <td>calification</td>
+               <td><input type="number" min="1" max="10" name="calification" id="" placeholder="1 to 10"></td>
+           </tr>
+           <tr>
+               <td>Review Body</td>
+               <td><textarea name="perfBody" id="" cols="30" rows="10"></textarea></td>
+           </tr>
+           <tr>
+               <td></td>
+               <td><button type="submit">send</button></td>
+           </tr>
+       </tbody>
+   </table> 
+    </form>
+</body>
+</html>
