@@ -8,7 +8,8 @@ const perfSchem = new mongoose.Schema({
     perfId: Number,
     perfTitle: String,
     perfBody: String,
-    calification: Number
+    calification: Number,
+    categories : [ String ]
 })
 
 export {

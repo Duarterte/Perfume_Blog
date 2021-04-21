@@ -1,0 +1,24 @@
+version: '3'
+
+services: 
+    main-server:
+        build: ./
+        container_name: prinapp
+        ports: 
+            - 3001:3000
+            - 4001:4000
+        tty: true
+        stdin_open: true
+        links: 
+            - mongo
+    mongo:
+        image: mongo
+        restart: always
+        ports:
+            - 27017:27017
+        volumes:
+            - ./perfumes:/db
+            - ./entrieForMongo.sh:/opt/entrieForMongo.sh
+        command: chmod +x /opt/entrieForMongo.sh
+        entrypoint: bash /opt/entrieForMongo.sh
+

@@ -9,10 +9,6 @@ import handlebars from 'express-handlebars';
 import { schem, perfSchem } from './schems';
 dotenv.config();
 
-//import { typeDefs, resolvers }  from './schema';
-
-
-
 const startServer = async () => {
     const app = express();
     
@@ -20,7 +16,13 @@ const startServer = async () => {
         typeDefs,
         resolvers
     })
-    await mongoose.connect('mongodb://localhost:27017/perfumes', {useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DB_USER, pass: process.env.DB_PASS});
+    let devOrProduc = process.env.DB_USER;
+    //terniary operator if is production connect to the production db if is dev connect ot the other one :V
+    (devOrProduc) ?(
+    await mongoose.connect('mongodb://localhost:27017/perfumes', {useNewUrlParser: true, useUnifiedTopology: true, user: process.env.DB_USER, pass: process.env.DB_PASS})):(
+    mongoose.connect(`mongodb://mongo:27017/perfumes`, {useNewUrlParser: true, useUnifiedTopology: true}).then(res=>console.log("connected")).catch(err=>console.log(err))
+    )
+
     var blogtorem = new mongoose.model('blogs', schem);
     var blogup = new mongoose.model('blogs', schem);
     var allBlogs = new mongoose.model('blogs', schem);
@@ -31,17 +33,17 @@ const startServer = async () => {
     app.engine('handlebars', handlebars())
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({extended: true}))
-    app.use('/static', express.static('/home/essi/Documents/wperfumes/server/api/static/'))
+    app.use('/static', express.static(__dirname+'/api/static/'))
     
-    
+    app.use('/', express.static(__dirname+'/build/')) 
     server.applyMiddleware({app})    
     
     app.get('/api', (req, res)=>{
-        res.render('home', {parametro: "est parameto", numero: 1515});
+        res.render('home', {parametro: "este parametro", numero: 1515});
         res.cookie('joda' , 'value', {expire : new Date() + (180*1000)});
     })
     app.get('/blog',(req, res)=>{
-        res.sendFile('/home/essi/Documents/wperfumes/server/api/blog.html');
+        res.sendFile(__dirname+'/api/blog.html');
     })
     app.post('/blog',async (req, res)=>{
         const Blog = new mongoose.model("blogs", schem);
@@ -53,7 +55,7 @@ const startServer = async () => {
     })
    
     app.get("/blogupdate", (req, res)=>{
-        res.sendFile('/home/essi/Documents/wperfumes/server/api/blogupdate.html')
+        res.sendFile(__dirname+'/api/blogupdate.html')
     })
 
     app.post("/blogupdate", async (req, res)=>{
@@ -64,7 +66,7 @@ const startServer = async () => {
     })
 
     app.get('/removeblog', (req, res)=>{
-        res.sendFile('/home/essi/Documents/wperfumes/server/api/remove.html')
+        res.sendFile(__dirname+'/api/remove.html')
     })
     app.post('/removeblog', async (req, res)=>{
         let allBody  = req.body;
@@ -81,18 +83,21 @@ const startServer = async () => {
         res.render('allb', {layout:'blogs', data: allB})
     })
     app.get('/review', (req, res)=>{
-        res.sendFile('/home/essi/Documents/wperfumes/server/api/review.html')
+        res.sendFile(__dirname+'/api/review.html')
     })    
 
     app.post('/review',async (req, res)=>{
         let allBody = req.body;
         let Review = new mongoose.model('perfs', perfSchem);
-        let addReview = new Review({perfTitle: allBody.perfTitle, perfBody: allBody.perfBody, calification: allBody.calification/10});
+        let categories = allBody.categories.toUpperCase().split(" ");
+
+        console.log(categories)
+        let addReview = new Review({perfTitle: allBody.perfTitle, perfBody: allBody.perfBody, calification: allBody.calification/10, categories});
         await addReview.save();
         res.redirect('http://localhost:4000/api');
     })    
     app.get('/perfupdate', (req, res)=> {
-        res.sendFile('/home/essi/Documents/wperfumes/server/api/perfupdate.html')
+        res.sendFile(__dirname+'/api/perfupdate.html')
     })
     app.post('/perfupdate', async (req, res)=>{
         let allBody = req.body;
@@ -108,7 +113,7 @@ const startServer = async () => {
     })
 
    app.get('/perfremove', (req, res)=>{
-    res.sendFile('/home/essi/Documents/wperfumes/server/api/perfremove.html')
+    res.sendFile(__dirname+'/api/perfremove.html')
    })
 
    app.post('/perfremove', async (req, res)=>{

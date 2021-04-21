@@ -6,6 +6,14 @@
                 <h3>{{perfTitle}}</h3>
                 <p>{{perfBody}}</p>
                 <p>{{calification}}</p>
+                <div>
+                    <span>categories :</span>
+                    {{#each categories}}
+                        <span>
+                            {{.}}
+                        </span>
+                    {{/each}}
+                </div>
                 {{#if perfTitle}}
                     <div class="" style=" justify-content: center;">
                     <form action="">
